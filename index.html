@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Socket</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .anyClass {
+            height:150px;
+            overflow-y: scroll;
+            border: 3px solid;
+            }
+        .active{
+            border: 2px solid ;
+            background-color: rgb(71, 68, 76) !important;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div style=" display: flex; align-items: center;">
+        <h1 style="padding-right: 20px;">Quán Net</h1><span id="name"></span>
+    </div>
+    <div>
+        <ul id="messages" class="w-100 p-5 nav nav-pills nav-stacked anyClass">   
+            
+        </ul>
+    </div>
+    <form id="chat-form">
+        <input type="text" id="chat-message">
+        <button id="send-chat">gửi</button>
+    </form>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io()
+        const chatForm = document.querySelector('#chat-form')
+        const chatMessage = document.querySelector('#chat-message')
+        const name = prompt('nhập tên')
+       
+        var scroll=document.getElementById("messages");
+        document.getElementById('name').innerHTML = `xin chào ${name}`
+        
+        
+        
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const message = chatMessage.value
+            socket.emit('on-chat', {
+                message: message,
+                name: name,
+                time: new Date().toLocaleTimeString()
+            })  
+            chatMessage.value = ''
+        })
+        const message = document.querySelector('#messages')
+        // socket.on('all-user', (mes) => {
+        //     const chatItem = document.createElement('li')
+        //     chatItem.classList.add('nav-link', 'active')
+        //     chatItem.textContent = ` [${mes.time}]-${mes.name}: ${mes.message}`
+        //     message.appendChild(chatItem)
+        //     scroll.scrollTop = scroll.scrollHeight
+            
+        // })
+
+    </script>
+</body>
+
+</html>
